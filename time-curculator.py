@@ -3,6 +3,7 @@ import datetime
 import tkinter.ttk
 import pytz
 
+#검색 가능한 드롭다운 개체
 class AutoCompleteCombobox(tkinter.ttk.Combobox):
     def setList(self, list):
         self.originList = sorted(list)
@@ -37,10 +38,14 @@ values = list(countries.keys())
 #시차 계산 (시차 알리미용)
 def calculate() :
     selected = selectCountry_diff.get()
-    if selected :
+    if selected in countries:
         resultMessege_diff.config(text=f'우리나라와 {selected}와(과)의 시차는?')
-    else:
-        return
+    elif selected not in countries:
+        resultMessege_diff.config(text='해당 국가의 시간을 찾을 수 없습니다.')
+        resultSpace_diff.configure(state='normal')
+        resultSpace_diff.delete(1.0, "end")
+        resultSpace_diff.configure(state='disabled')    
+
 
     korea = pytz.timezone('Asia/Seoul')
     target = pytz.timezone(countries[selected])
@@ -62,7 +67,7 @@ def calculate() :
     resultSpace_diff.insert(1.0, f'{int(timeDifference)}시간')
     resultSpace_diff.configure(state='disabled')
 
-#메인에 현재 시간 출력용
+#메인에 현재 시간용
 def mainNowTime():
     nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     nowPrint.configure(state='normal')
@@ -71,13 +76,16 @@ def mainNowTime():
     nowPrint.configure(state='disabled')
     mainScreen.after(1000, mainNowTime)
 
-#현재 시간 변환 출력용
+#현재 시간 변환용
 def transNowTime():
     selected = selectCountry_now.get()
-    if selected :
+    if selected in countries:
         resultMessege_now.config(text=f'현재 {selected}의 시간은 ?')
-    else:
-        return
+    elif selected not in countries:
+        resultMessege_now.config(text='해당 국가의 시간을 찾을 수 없습니다.')
+        resultSpace_now.configure(state='normal')
+        resultSpace_now.delete(1.0, "end")
+        resultSpace_now.configure(state='disabled')    
     
     target = pytz.timezone(countries[selected])
 
@@ -88,7 +96,17 @@ def transNowTime():
     resultSpace_now.configure(state='disabled')
     nowTimescreen.after(1000, transNowTime)
 
+#지정 시간 변환용
 def transSelectTime():
+    selected = selectCountry.get()
+    if selected in countries:
+        resultMessege_select.config(text=f'설정한 시간은 {selected}에서는 ?')
+    elif selected not in countries:
+        resultMessege_select.config(text='해당 국가의 시간을 찾을 수 없습니다.')
+        resultSpace_select.configure(state='normal')
+        resultSpace_select.delete(1.0, "end")
+        resultSpace_select.configure(state='disabled')  
+        
     hour = int(setHour.get())
     minute = int(setMinute.get())
     second = int(setSecond.get())
@@ -97,14 +115,9 @@ def transSelectTime():
     today = datetime.datetime.combine(nowDate, datetime.time(hour, minute, second))
 
     korea = pytz.timezone('Asia/Seoul')
-    koreaTime = korea.localize(today)
+    koreaTime = korea.localize(today)  
 
-    selected = selectCountry.get()
     transCountry = pytz.timezone(countries[selected])
-    if selected :
-        resultMessege_select.config(text=f'설정한 시간은 {selected}에서는 ?')
-    else:
-        return
 
     timeTrans = koreaTime.astimezone(transCountry)
     resultSpace_select.configure(state='normal')
@@ -147,10 +160,13 @@ nowTimeButt = Button(mainScreen, text='현재 시간 변환', width=40, height=2
 nowTimeButt.place(x=70, y=510)
     #현재 시간 출력
 now = Label(mainScreen, text=f'현재 우리나라 시간은?', font='프리텐다드 20', bg='white', fg='black')
-now.place(x=180, y=650)
+now.place(x=180, y=600)
 
 nowPrint = Text(mainScreen, width=40, height=3, fg='black', bg='white')
-nowPrint.place(x=130, y=700)
+nowPrint.place(x=130, y=650)
+    #종료 버튼
+quit_butt = Button(mainScreen, text='종료', width=40, height=2, command=screen.destroy)
+quit_butt.place(x=70, y=750)
 
 #시차 알리미 화면 (timeDiffscreen)
 subtitle_diff = Label(timeDiffscreen, text='한국 기준', font='프리텐다드 20', bg='white', fg='red')

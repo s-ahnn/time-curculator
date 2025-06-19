@@ -3,7 +3,6 @@
 아디스아바바: Africa/Addis_Ababa
 알제: Africa/Algiers
 아스마라: Africa/Asmara
-아스메라: Africa/Asmera
 바마코: Africa/Bamako
 방기: Africa/Bangui
 반줄: Africa/Banjul
@@ -26,7 +25,7 @@
 요하네스버그: Africa/Johannesburg
 주바: Africa/Juba
 캄팔라: Africa/Kampala
-하르툼: Africa/Khartoum
+카르툼: Africa/Khartoum
 키갈리: Africa/Kigali
 킨샤사: Africa/Kinshasa
 라고스: Africa/Lagos

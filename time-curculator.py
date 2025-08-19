@@ -2,6 +2,8 @@ from tkinter import *
 import datetime
 import tkinter.ttk
 import pytz
+import os
+import sys
 
 #검색 가능한 드롭다운 개체
 class AutoCompleteCombobox(tkinter.ttk.Combobox):
@@ -20,17 +22,22 @@ class AutoCompleteCombobox(tkinter.ttk.Combobox):
 
         # self.event_generate('<Down>')
 
-def makeDict() :
+def makeDict():
     countries = dict()
+    
+    if getattr(sys, 'frozen', False): 
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
 
-    with open('timezone.txt', 'r', encoding='utf-8') as f:
+    file_path = os.path.join(base_path, 'timezone.txt')
+
+    with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
-            line = line.strip()
-
-            key, value = line.split(':')
+            key, value = line.strip().split(':')
             countries[key.strip()] = value.strip()
 
-        return countries
+    return countries
 
 countries = makeDict()
 values = list(countries.keys())
